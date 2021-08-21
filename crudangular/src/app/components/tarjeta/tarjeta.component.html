@@ -20,36 +20,45 @@
                     <form [formGroup]="form" (ngSubmit)="agregarTarjeta()">
                         <div class="input-group input-group-lg mb-3">
                             <span class="input-group-text">
-                                <i class="fa fa-user"></i>
+                                <i class="fa fa-user"
+                                [class.green-icon]="this.form.get('titulo')?.valid"                                
+                                [class.red-icon]="this.form.get('titulo')?.invalid && this.form.get('titulo')?.touched">
+                                </i>
                             </span>
                             <input formControlName="titulo" type="text" class="form-control" placeholder="Titular">
                         </div>   
                         <div class="input-group input-group-lg mb-3">
                             <span class="input-group-text">
-                                <i class="fa fa-credit-card"></i>
+                                <i class="fa fa-credit-card"
+                                [class.green-icon]="this.form.get('numeroTarjeta')?.valid"                                
+                                [class.red-icon]="this.form.get('numeroTarjeta')?.invalid && this.form.get('numeroTarjeta')?.touched"></i>
                             </span>
-                            <input formControlName="numeroTarjeta" type="text" class="form-control" placeholder="Numero de Tarjeta">
+                            <input formControlName="numeroTarjeta" maxlength="16" type="text" class="form-control" placeholder="NumerodeTarjeta">
                         </div>   
                         <div class="row">
                             <div class="col-lg-7">
                                 <div class="input-group input-group-lg mb-3">
                                     <span class="input-group-text">
-                                        <i class="fa fa-calendar-alt"></i>
+                                        <i class="fa fa-calendar-alt"
+                                        [class.green-icon]="this.form.get('fechaExpiracion')?.valid"                                
+                                        [class.red-icon]="this.form.get('fechaExpiracion')?.invalid && this.form.get('fechaExpiracion')?.touched"></i>
                                     </span>
-                                    <input  formControlName="fechaExpiracion" type="text" class="form-control" placeholder="MM/YY">
+                                    <input  formControlName="fechaExpiracion" maxlength="5" type="text" class="form-control" placeholder="MM/YY">
                                 </div>   
                             </div>
                             <div class="col-lg-5">
                                 <div class="input-group input-group-lg mb-3">
                                     <span class="input-group-text">
-                                        <i class="fa fa-key"></i>
+                                        <i class="fa fa-key"
+                                        [class.green-icon]="this.form.get('cvv')?.valid"                                
+                                        [class.red-icon]="this.form.get('cvv')?.invalid && this.form.get('cvv')?.touched"></i>
                                     </span>
-                                    <input formControlName="cvv" type="password" class="form-control" placeholder="CVV">
+                                    <input formControlName="cvv" maxlength="3" type="password" class="form-control" placeholder="CVV">
                                 </div> 
                             </div>
                         </div>
                         <div class="d-grid gap-2">
-                            <button type="submit" class="btn btn-success btn-lg">
+                            <button [disabled]="this.form.invalid" type="submit" class="btn btn-success btn-lg">
                                <i class="fa fa-database"></i>&nbsp; Aceptar
                             </button>
                         </div>
@@ -66,12 +75,12 @@
                     </h5>
                     <table class="table">
                         <tbody>
-                            <tr *ngFor="let tarjeta of listTarjetas">
+                            <tr *ngFor="let tarjeta of listTarjetas; let i = index">
                                 <td>{{ tarjeta.titulo}}</td>
                                 <td>{{ tarjeta.numerotarjeta }}</td>
                                 <td>{{ tarjeta.fechaExpiracion }}</td>
                                 <td><i class="fa fa-edit text-info"></i></td>
-                                <td><i class="fa fa-trash text-danger"></i></td>
+                                <td><i (click)="eliminarTarjeta(i)" class="fa fa-trash text-danger"></i></td>
                             </tr>
                         </tbody>
                     </table>
