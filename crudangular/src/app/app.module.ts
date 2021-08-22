@@ -6,7 +6,7 @@ import { ToastrModule } from 'ngx-toastr';
 
 import { AppComponent } from './app.component';
 import { TarjetaComponent } from './components/tarjeta/tarjeta.component';
-
+import { HttpClientModule } from '@angular/common/http'
 
 
 @NgModule({
@@ -19,6 +19,7 @@ import { TarjetaComponent } from './components/tarjeta/tarjeta.component';
     ReactiveFormsModule,
     BrowserAnimationsModule, // required animations module
     ToastrModule.forRoot(), // ToastrModule added
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]
