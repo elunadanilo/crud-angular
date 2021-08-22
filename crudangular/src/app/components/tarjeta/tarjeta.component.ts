@@ -16,8 +16,11 @@ export class TarjetaComponent implements OnInit {
     {titulo: "Pedrin", numerotarjeta: "123456789012", fechaExpiracion: "21/12/2023", cvv: "121"}*/
   ];
 
+  accion ='Agregar';
+
   form: FormGroup;
 
+  id: number | undefined;
 
   constructor(private fb: FormBuilder,
     private toastr: ToastrService,
@@ -43,7 +46,7 @@ export class TarjetaComponent implements OnInit {
     })
   }
 
-  agregarTarjeta(){
+  guardarTarjeta(){
     //console.log(this.form);
     const tarjeta: any = {
       titulo: this.form.get('titulo')?.value,
@@ -52,15 +55,28 @@ export class TarjetaComponent implements OnInit {
       cvv: this.form.get('cvv')?.value
     }
     //this.listTarjetas.push(tarjeta)
-    this._tarjetaService.saveTarjeta(tarjeta).subscribe(data => {
-      this.toastr.success('La tarjeta fue registrado con exito', 'Tarjeta Registrada');
-      this.obtenerTarjetas();
-      this.form.reset()
-    }, error => {
-      this.toastr.error('Opss... ocurrio un error', 'Error');
-      console.log(error);
-    })
+    if(this.id == undefined){
+      this._tarjetaService.saveTarjeta(tarjeta).subscribe(data => {
+        this.toastr.success('La tarjeta fue registrado con exito', 'Tarjeta Registrada');
+        this.obtenerTarjetas();
+        this.form.reset()
+      }, error => {
+        this.toastr.error('Opss... ocurrio un error', 'Error');
+        console.log(error);
+      })
+    }else{
+      tarjeta.id = this.id;
+      this._tarjetaService.updateTarjeta(this.id,tarjeta).subscribe(data =>{
+        this.form.reset();
+        this.accion='Agregar';
+        this.id=undefined;
+        this.toastr.info('La tarjeta fue actualizada correctamente','tarjeta Actualizada')
+        this.obtenerTarjetas();
 
+      },error => {
+        console.log(error);
+      });
+    }
   }
 
   eliminarTarjeta(id: number){
@@ -73,5 +89,17 @@ export class TarjetaComponent implements OnInit {
     //console.log(index);
     //this.listTarjetas.splice(index,1); //el 1 es para eliminar solo un elemento
     
+  }
+
+  editarTarjeta(tarjeta :any){
+    this.accion = 'Editar';
+    this.id = tarjeta.id;
+
+    this.form.patchValue({
+      titulo: tarjeta.titulo,
+      numeroTarjeta: tarjeta.numeroTarjeta,
+      fechaExpiracion: tarjeta.fechaExpiracion,
+      cvv: tarjeta.cvv
+    })
   }
 }
